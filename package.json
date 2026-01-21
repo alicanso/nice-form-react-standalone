@@ -9,15 +9,30 @@
   "types": "./lib/esm/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    "./*": {
-      "types": "./lib/esm/*.d.ts",
-      "import": "./lib/esm/*.js",
-      "require": "./lib/cjs/*.js"
-    },
     ".": {
       "types": "./lib/esm/index.d.ts",
       "import": "./lib/esm/index.js",
       "require": "./lib/cjs/index.js"
+    },
+    "./adapters/antdAdapter": {
+      "types": "./lib/esm/adapters/antdAdapter.d.ts",
+      "import": "./lib/esm/adapters/antdAdapter.js",
+      "require": "./lib/cjs/adapters/antdAdapter.js"
+    },
+    "./adapters/formikAdapter": {
+      "types": "./lib/esm/adapters/formikAdapter.d.ts",
+      "import": "./lib/esm/adapters/formikAdapter.js",
+      "require": "./lib/cjs/adapters/formikAdapter.js"
+    },
+    "./adapters/formikMuiAdapter": {
+      "types": "./lib/esm/adapters/formikMuiAdapter.d.ts",
+      "import": "./lib/esm/adapters/formikMuiAdapter.js",
+      "require": "./lib/cjs/adapters/formikMuiAdapter.js"
+    },
+    "./*": {
+      "types": "./lib/esm/*.d.ts",
+      "import": "./lib/esm/*.js",
+      "require": "./lib/cjs/*.js"
     }
   },
   "files": [
