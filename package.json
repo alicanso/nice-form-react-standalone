@@ -7,6 +7,14 @@
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "adapters/antdAdapter": ["./lib/esm/adapters/antdAdapter.d.ts"],
+      "adapters/formikAdapter": ["./lib/esm/adapters/formikAdapter.d.ts"],
+      "adapters/formikMuiAdapter": ["./lib/esm/adapters/formikMuiAdapter.d.ts"],
+      "*": ["./lib/esm/*.d.ts"]
+    }
+  },
   "exports": {
     "./package.json": "./package.json",
     ".": {
