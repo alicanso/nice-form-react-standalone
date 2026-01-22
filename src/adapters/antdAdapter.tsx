@@ -11,8 +11,10 @@ import {
   Switch,
   FormInstance,
   Button,
+  Flex,
 } from 'antd';
 import { NamePath } from 'antd/es/form/interface';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { FormListFieldData, FormListOperation } from 'antd/es/form';
 import {
   NiceFormMeta,
@@ -143,6 +145,26 @@ const antdAdapter: NiceFormAdapter = {
         return field;
       },
     },
+    image: {
+      widget: ({ urls, maxHeight, gap = 8, ...rest }: { urls: string[]; maxHeight?: number | string; gap?: number | string; [key: string]: any }) => {
+        if (!urls || urls.length === 0) return null;
+        return (
+          <Flex wrap="wrap" gap={gap} align="center" {...rest}>
+            {urls.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`image-${index}`}
+                style={{
+                  maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+                  objectFit: 'contain',
+                }}
+              />
+            ))}
+          </Flex>
+        );
+      },
+    },
     'form-list': {
       widget: Form.List,
       metaConverter: ({ field }: { field: AntdNiceFormField }) => {
@@ -176,23 +198,18 @@ const antdAdapter: NiceFormAdapter = {
                       },
                       ...(fieldIndex === multipleFields.length - 1 ? {
                         extraNode: fields.length > 1 ? (
-                          <span
+                          <Button
+                            type="text"
+                            danger
+                            icon={<MinusCircleOutlined />}
+                            onClick={() => remove(f.name)}
+                            className="dynamic-delete-button"
                             style={{
                               position: 'absolute',
-                              right: '-24px',
-                              top: '9px',
-                              color: 'red',
-                              width: '16px',
-                              height: '16px',
-                              borderRadius: '50%',
-                              border: '1px solid red',
-                              textAlign: 'center',
-                              cursor: 'pointer',
-                              lineHeight: '12px',
+                              right: -32,
+                              top: 4,
                             }}
-                            className="dynamic-delete-button"
-                            onClick={() => remove(f.name)}
-                          >-</span>
+                          />
                         ) : null,
                       } : {}),
                     });
@@ -214,8 +231,8 @@ const antdAdapter: NiceFormAdapter = {
                       fields: allItemFields 
                     }} />
                     {field.hasOwnProperty('listBottom') ? field.listBottom : (
-                      <Button type="link" onClick={() => add(getDefaultValue())} {...(field.addItemButtonProps || {})}>
-                        {field.addItemButtonLabel || '+ Add Item'}
+                      <Button type="dashed" onClick={() => add(getDefaultValue())} icon={<PlusOutlined />} {...(field.addItemButtonProps || {})}>
+                        {field.addItemButtonLabel || 'Add Item'}
                       </Button>
                     )}
                   </>
@@ -230,31 +247,20 @@ const antdAdapter: NiceFormAdapter = {
                   style: {
                     marginBottom: '10px',
                   },
-                  extraNode: (
-                    <>
-                      {fields.length > 1 ? (
-                        <span
-                          style={{
-                            position: 'absolute',
-                            right: '-24px',
-                            top: '9px',
-                            color: 'red',
-                            width: '16px',
-                            height: '16px',
-                            borderRadius: '50%',
-                            border: '1px solid red',
-                            textAlign: 'center',
-                            cursor: 'pointer',
-                            lineHeight: '12px',
-                          }}
-                          className="dynamic-delete-button"
-                          onClick={() => remove(f.name)}
-                        >
-                          -
-                        </span>
-                      ) : null}
-                    </>
-                  ),
+                  extraNode: fields.length > 1 ? (
+                    <Button
+                      type="text"
+                      danger
+                      icon={<MinusCircleOutlined />}
+                      onClick={() => remove(f.name)}
+                      className="dynamic-delete-button"
+                      style={{
+                        position: 'absolute',
+                        right: -32,
+                        top: 4,
+                      }}
+                    />
+                  ) : null,
                   ...(field.listItemMeta || {}),
                   ...(field.getListItemMeta
                     ? field.getListItemMeta(fields, { add, move, remove }, { errors }, i)
@@ -268,8 +274,8 @@ const antdAdapter: NiceFormAdapter = {
                   {field.hasOwnProperty('listBottom') ? (
                     field.listBottom
                   ) : (
-                    <Button type="link" onClick={() => add()} {...(field.addItemButtonProps || {})}>
-                      {field.addItemButtonLabel || '+ Add Item'}
+                    <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />} {...(field.addItemButtonProps || {})}>
+                      {field.addItemButtonLabel || 'Add Item'}
                     </Button>
                   )}
                 </>
@@ -396,7 +402,7 @@ const antdAdapter: NiceFormAdapter = {
 
     // These std keys are passed to Form.Item directly
     ['initialValue', 'help', 'required', 'label', 'name'].forEach((k) => {
-      wrapperProps[k] = field[k];
+      wrapperProps[k as keyof FormItemProps] = field[k as keyof NiceFormField];
     });
 
     if (meta.viewMode) {
