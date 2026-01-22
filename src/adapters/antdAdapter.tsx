@@ -12,7 +12,9 @@ import {
   FormInstance,
   Button,
   Flex,
+  Table,
 } from 'antd';
+import type { TableProps } from 'antd';
 import { NamePath } from 'antd/es/form/interface';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { FormListFieldData, FormListOperation } from 'antd/es/form';
@@ -164,6 +166,9 @@ const antdAdapter: NiceFormAdapter = {
           </Flex>
         );
       },
+    },
+    table: {
+      widget: (props: TableProps<any>) => <Table {...props} />,
     },
     'form-list': {
       widget: Form.List,
